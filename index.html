@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Usuarios</title>
+</head>
+<body>
+
+<h2>Crear Usuario</h2>
+<input type="text" id="nombre" placeholder="Nombre">
+<input type="text" id="cedula" placeholder="Cédula">
+<input type="text" id="telefono" placeholder="Teléfono">
+<button onclick="crearUsuario()">Guardar</button>
+
+<h2>Lista de Usuarios</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Cédula</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody id="tablaUsuarios"></tbody>
+</table>
+
+<script>
+const API = "http://localhost/api.php";
+
+function cargarUsuarios() {
+    fetch(API)
+        .then(res => res.json())
+        .then(data => {
+            let tabla = "";
+            data.forEach(u => {
+                tabla += `
+                    <tr>
+                        <td>${u.id}</td>
+                        <td>${u.nombre}</td>
+                        <td>${u.cedula}</td>
+                        <td>${u.telefono}</td>
+                        <td>
+                            <button onclick="eliminar(${u.id})">Eliminar</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById("tablaUsuarios").innerHTML = tabla;
+        });
+}
+
+function crearUsuario() {
+    const nombre = document.getElementById("nombre").value;
+    const cedula = document.getElementById("cedula").value;
+    const telefono = document.getElementById("telefono").value;
+
+    fetch(API, {
+        method: "POST",
+        body: JSON.stringify({ nombre, cedula, telefono })
+    })
+    .then(() => {
+        cargarUsuarios();
+    });
+}
+
+function eliminar(id) {
+    fetch(API, {
+        method: "DELETE",
+        body: JSON.stringify({ id })
+    })
+    .then(() => {
+        cargarUsuarios();
+    });
+}
+
+cargarUsuarios();
+</script>
+
+</body>
+</html>
