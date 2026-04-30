@@ -4,7 +4,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
 
-$conexion = new mysqli("localhost", "root", "", "gestion_usuarios");
+$conexion = new mysqli("mysql-jhonatan1.alwaysdata.net", "jhonatan1", "clase123", "jhonatan1_gestion_usuarios");
 
 if ($conexion->connect_error) {
     die(json_encode(["error" => "Error de conexión"]));
